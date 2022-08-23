@@ -1,0 +1,37 @@
+This is XeOS, a multitasking modular OS kernel. It is designed as a research
+operating system, and uses a microkernel for this purpose.
+
+Currently, XeOS consists of a microkernel, a few modules and a small libc
+which is used for the modules. A module can be a program (such as the
+'sh' mini-shell) but also a device driver (such as the ne2k, ide and console
+modules), a filesystem (fatfs); there is no distinction made by the kernel
+itself. All modules are ELF files and will get their own memory map.
+
+All inter process communication (IPC) is done using mailboxes and system
+calls. This makes the OS very versatile, but it currently isn't very fast. This
+is mainly due to the path that must be taken. For example, the filesystem
+and disk driver are 2 seperate threads, which must be switched between to
+handle sector reading and handling. It would be much faster to use shared
+memory for these purposes, as they avoid a lot of memcpy()'s and thus speed
+it all up too.
+
+The OS is currently i386+ only, but it should be do-able without too much
+effort to port this to another architecture. XeOS uses some of the nicer
+i386 features, such as paging, I/O space alocation and privilege rings. The
+module resources is a bit too i386 specific as well.
+
+I am releasing this under a BSD license; I hope this will be useful for
+fellow OS enthoisiasts out there. I might even pick up some issues here and
+there... but as time is short, I am unsure whether I will be able to do this.
+
+The code was modified to work using GCC 3.4.2 (this GCC release does things
+different when handling stack, which caused syscall handlers to trash); it
+runs fine using Bochs. You *must* use GNU make to build all this!
+
+Anyway, drop me a line if you can't figure something out. Patches are welcome,
+it certaintly would motive me for working more on this :-)
+
+Regards,
+Rink Springer
+rink@rink.nu
+9 Oct 2005
